@@ -12,7 +12,7 @@ services:
         target: /data/.lnd/lnd.conf
       - type: bind
         source: .
-        target: /bound_lnd_folder
+        target: /lnd_folder_root
       - type: bind
         source: ../tmp
         target: /tmp
