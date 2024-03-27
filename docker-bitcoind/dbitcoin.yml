@@ -12,8 +12,8 @@ services:
       - type: bind
         source: ./bitcoin.conf
         target: /bitcoin/.bitcoin/bitcoin.conf
-      - type: bind
-        source: ../tmp
-        target: /tmp
+      # - type: bind
+      #   source: ../tmp
+      #   target: /tmp
 
     network_mode: host
