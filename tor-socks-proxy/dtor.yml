@@ -1,0 +1,18 @@
+services:
+  tor:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    volumes:
+      - type: bind
+        source: ./tor-data
+        target: /data
+      - type: bind
+        source: ./torrc
+        target: /etc/tor/torrc
+      - type: bind
+        source: ../tmp
+        target: /tmp
+    environment:
+      HOME: "/tmp"
+    network_mode: host
