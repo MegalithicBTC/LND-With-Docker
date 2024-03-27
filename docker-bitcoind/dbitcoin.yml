@@ -1,0 +1,19 @@
+version: '3'
+services:
+  bitcoind:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    container_name: bitcoind
+    volumes:
+      - type: bind
+        source: ./bitcoind-data
+        target: /bitcoin/.bitcoin
+      - type: bind
+        source: ./bitcoin.conf
+        target: /bitcoin/.bitcoin/bitcoin.conf
+      - type: bind
+        source: ../tmp
+        target: /tmp
+
+    network_mode: host
