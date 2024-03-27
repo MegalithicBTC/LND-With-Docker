@@ -1,5 +1,5 @@
 SOCKSPort 127.0.0.1:9050
-Log notice stdout
 ControlPort 127.0.0.1:9051
+Log notice stdout
 CookieAuthentication 1
 CookieAuthFileGroupReadable 1

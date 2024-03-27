@@ -1,5 +1,6 @@
 services:
   tor:
+    user: "1000:1000"
     build:
       dockerfile: Dockerfile
       context: .
