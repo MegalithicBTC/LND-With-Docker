@@ -1,6 +1,7 @@
 services:
   tor:
     user: "1000:1000"
+    container_name: tor-socks-proxy
     build:
       dockerfile: Dockerfile
       context: .
