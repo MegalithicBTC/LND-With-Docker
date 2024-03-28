@@ -13,6 +13,7 @@ services:
         - type: bind
           source: ..
           target: /workspace/lightning
-      command: ./start.sh
+      command: >
+              sh -c "python3 watch_backups.py"
       env_file:
         - ../../secrets.env
