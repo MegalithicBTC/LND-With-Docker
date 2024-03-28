@@ -12,15 +12,14 @@ aws_secret_access_key = os.environ.get('AWS_SECRET_ACCESS_KEY')
 aws_region = os.environ.get('S3_BUCKET_REGION')
 bucket_name =  os.environ.get('S3_BUCKET_NAME')
 
+print("starting watch_backups.py")
+
 # AWS S3 Bucket and Folder settings
-bucket_name = 'ezvid-lightning'
 folder_name = 'lnd-channel-backups'
 
-lnd_folder = " /workspace/lightning/lnd"
+lnd_folder = " /workspace/lightning/lnd/"
 file_to_monitor = lnd_folder + "lnd-data/data/chain/bitcoin/mainnet/channel.backup"
-
-channel_alias = os.environ.get('alias')
-print("channel_alias", channel_alias)
+print("monitoring this file", file_to_monitor)
 
 # Initialize S3 client with the specified region
 s3 = boto3.client(
@@ -32,10 +31,9 @@ s3 = boto3.client(
 
 # Upload function
 def upload_file_to_s3(file_path, bucket_name, folder_name):
-    channel_backup_filenames_on_s3 = channel_alias  + "-" + str(uuid.uuid4())[:6] + '-' + "channel.backup"
+    channel_backup_filenames_on_s3 =  str(uuid.uuid4())[:6] + '-' + "channel.backup"
     file_name = channel_backup_filenames_on_s3
     s3_object_key = os.path.join(folder_name, file_name)
-
     try:
         s3.upload_file(file_path, bucket_name, s3_object_key)
         print(f'Uploaded {file_path} to S3 as {s3_object_key}')

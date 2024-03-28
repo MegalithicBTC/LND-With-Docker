@@ -16,11 +16,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     zlib1g-dev 
 
 RUN echo 'PS1="\[$(tput setaf 3)$(tput bold)[\]lightning-pworker:\\w]#\[$(tput sgr0) \]"' >> /root/.bashrc
-WORKDIR /workspace/lightning
+COPY . /workspace/lightning/pworker
+WORKDIR /workspace/lightning/pworker
 RUN pip3 install pika
 RUN pip3 install dotmap
 RUN pip3 install redis
-RUN pip3 install docker
 RUN pip3 install requests
 RUN pip3 install urllib3
 RUN pip3 install sentry-sdk

@@ -2,6 +2,7 @@ version: '3'
 
 services:
   pworker:
+      user: "1000:1000"
       build:
         context: .
         dockerfile: Dockerfile
@@ -12,9 +13,6 @@ services:
         - type: bind
           source: ..
           target: /workspace/lightning
-      command: >
-              sh -c "python3 watch_backups.py"
+      command: ./start.sh
       env_file:
         - ../../secrets.env
-      network_mode: 'host'
- 
