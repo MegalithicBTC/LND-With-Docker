@@ -17,8 +17,9 @@ print("starting watch_backups.py")
 # AWS S3 Bucket and Folder settings
 folder_name = 'lnd-channel-backups'
 
-lnd_folder = " /workspace/lightning/lnd/"
-file_to_monitor = lnd_folder + "lnd-data/data/chain/bitcoin/mainnet/channel.backup"
+lnd_folder = "/workspace/lightning/lnd/"
+file_to_monitor =  os.path.join(lnd_folder,"lnd-data/data/chain/bitcoin/mainnet/channel.backup") 
+print('current working directory', os.getcwd())
 print("monitoring this file", file_to_monitor)
 
 # Initialize S3 client with the specified region
