@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %} {{ block.super }} - Forwards{% endblock %}
+{% block content %}
+{% load humanize %}
+<div id="forwardsDiv" class="w3-container w3-padding-small">
+  <h2>Last Forwards</h2>
+  <table id="forwardsTable" class="w3-table-all w3-centered w3-hoverable">
+    <tr>
+      <th>Timestamp</th>
+      <th>Channel In Id</th>
+      <th>Channel In Alias</th>
+      <th colspan="2">Amount In</th>
+      <th colspan="2">Amount Out</th> 
+      <th>Channel Out Alias</th>
+      <th>Channel Out Id</th>
+      <th>Fees Earned</th>
+      <th>PPM Earned</th>
+    </tr>
+    <tfoot id="loadMoreForwards">
+      <tr style="background-color:transparent;cursor:pointer;">
+        <td colspan="9">
+          <a onclick="loadForwards()">Load More</a>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', async () =>{
+    const forwardsTable = byId('forwardsTable')
+    const forwards_task = GET('forwards', {data: {limit: 50} })
+    let forwards = (await forwards_task).results
+    if(forwards.length == 0){
+      document.getElementById("forwardsDiv").innerHTML = `<center><h1>You dont have any forwards yet.</h1></center>`
+      return
+    }
+    build_routed(forwards)
+  })
+  async function loadForwards(){
+    const lastId = forwardsTable.tBodies[0].lastChild.objId
+    const forwards_task = GET('forwards', {data: {id__lt: lastId, limit: 50} })
+    let next_forwards = (await forwards_task).results
+    if(next_forwards.length==0){
+      byId("loadMoreForwards").style.display = "none"
+      return
+    }
+    build_routed(next_forwards)
+  }
+  async function build_routed(forwards){
+    const tableBody = forwardsTable.querySelector("tbody")
+    for (f of forwards){
+      f.amt_in = f.amt_in_msat/1000
+      f.amt_out = f.amt_out_msat/1000
+      f.ppm = f.fee*1000000/f.amt_out
+      tableBody.appendChild(use(routed_template).render(f))
+    }
+  }
+</script>
+{% endblock %}

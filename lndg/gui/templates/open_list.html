@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %} {{ block.super }} - Opens{% endblock %}
+{% block content %}
+{% load humanize %}
+{% if open_list %}
+<div class="w3-container w3-padding-small">
+  <h2>Suggested Open List</h2>
+  <div class="w3-container w3-padding-small" style="overflow-x: scroll">
+    <table class="w3-table-all w3-centered w3-hoverable">
+      <tr>
+        <th>Node Pubkey</th>
+        <th width=15%>Node Alias</th>
+        <th width=15%>Successful Payments Routed</th>
+        <th width=12%>Amount Routed</th>
+        <th width=12%>Fees Paid</th>
+        <th title="Total fees paid to the peer over total routed through the peer." width=12%>Effective PPM</th>
+        <th title="A score factoring in both number of payments and volume of payments routed through the peer." width=12%>Volume Score</th>
+        <th title="The amount you could have potentially saved on rebalancing payments if you had been peered directly with this node over total volume routed through the peer." width=12%>Savings By Volume</th>
+      </tr>
+      {% for node in open_list %}
+      <tr>
+        <td><a href="{{ graph_links }}/{{ network }}node/{{ node.node_pubkey }}" target="_blank">{{ node.node_pubkey }}</a></td>
+        <td>{% if node.alias == '' %}---{% else %}{{ node.alias }}{% endif %}</td>
+        <td><a href="/routes?={{ node.node_pubkey }}" target="_blank">{{ node.count }}</a></td>
+        <td>{{ node.amount|add:"0"|intcomma }}</td>
+        <td>{{ node.fees|add:"0"|intcomma }}</td>
+        <td>{{ node.ppm|add:"0"|intcomma }}</td>
+        <td>{{ node.score }}</td>
+        <td>{{ node.sum_cost_to|add:"0"|intcomma }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% else %}
+<div class="w3-container w3-padding-small">
+  <center><h1>No potential peers can be calculated yet, try waiting until you have some payment data.</h1></center>
+</div>
+{% endif %}
+{% if avoid_list %}
+<div class="w3-container w3-padding-small">
+  <h2>Avoid/Exclude List</h2>
+  <div class="w3-container w3-padding-small" style="overflow-x: scroll">
+    <table class="w3-table-all w3-centered w3-hoverable">
+      <tr>
+        <th width=7%>Updated</th>
+        <th width=18%>Node Pubkey</th>
+        <th width=65%>Notes</th>
+        <th>Remove</th>
+      </tr>
+      {% for node in avoid_list %}
+      <tr>
+        <td>{{ node.updated|naturaltime }}</td>
+        <td>{{ node.pubkey }}</td>
+        <td>{% if node.notes == '' %}---{% else %}{{ node.notes }}{% endif %}</td>
+        <td>
+          <form action="/remove_avoid/" method="post">
+            {% csrf_token %}
+            <input style="border: none" type="submit" value="❌">
+            <input type="hidden" name="pubkey" value="{{ node.pubkey }}">
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% else %}
+<div class="w3-container w3-padding-small">
+  <center><h1>No node added to the exclusion list yet. Add nodes here you want to avoid connecting to in the future.</h1></center>
+</div>
+{% endif %}
+<div class="w3-container w3-padding-small">
+  <h2>Add Node To Exclusion List Or Update Existing Notes</h2>
+  <form action="/add_avoid/" method="post">
+    {% csrf_token %}
+    <label for="pubkey">Node Pubkey: </label>
+    <input id="pubkey" type="text" name="pubkey" style="width:19%">
+    <label for="notes">Notes: </label>
+    <input id="notes" type="text" name="notes" style="width:70%">
+    <input type="submit" value="OK">
+  </form>
+</div>
+{% endblock %}

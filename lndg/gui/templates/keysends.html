@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %} {{ block.super }} - Keysends{% endblock %}
+{% block content %}
+{% load humanize %}
+{% if keysends %}
+<div class="w3-container w3-padding-small">
+  <h2>Received Keysends</h2>
+  <table class="w3-table-all w3-centered w3-hoverable" style="word-break: break-all">
+    <tr>
+      <th width=5%>Revenue?</th>
+      <th width=10%>Settle Date</th>
+      <th width=10%>Channel In Alias</th>
+      <th width=5%>Amount</th>
+      <th>Message</th>
+    </tr>
+    {% for keysend in keysends %}
+    <tr>
+      <td {% if keysend.is_revenue == True %}style="background-color: rgba(56,139,253,0.15)"{% endif %}>
+        <form action="/update_keysend/" method="post">
+          {% csrf_token %}
+          <input type="submit" value="{% if keysend.is_revenue == True %}Unmark{% else %}Mark{% endif %}">
+          <input type="hidden" name="r_hash" value="{{ keysend.r_hash }}">
+        </form>
+      </td>
+      <td title="{{ keysend.settle_date }}">{{ keysend.settle_date|naturaltime }}</td>
+      <td title="{{ keysend.chan_in }}">{% if keysend.chan_in_alias == '' %}---{% else %}{{ keysend.chan_in_alias }}{% endif %}</td>
+      <td title="{{ keysend.r_hash }}">{{ keysend.amt_paid|intcomma }}</td>
+      <td>{{ keysend.message }}{% if keysend.sender != None %} | Signed By: {% if keysend.sender_alias != None %}{{ keysend.sender_alias }}{% else %}{{ keysend.sender }}{% endif %}{% endif %}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %}
+{% if not keysends %}
+<div class="w3-container w3-padding-small">
+  <center><h1>You dont have any keysend messages here yet!</h1></center>
+</div>
+{% endif %}
+{% endblock %}

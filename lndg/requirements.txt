@@ -1,0 +1,11 @@
+Django
+djangorestframework
+django-filter
+grpcio
+protobuf
+pytz
+pandas
+requests
+asyncio
+bech32
+cryptography

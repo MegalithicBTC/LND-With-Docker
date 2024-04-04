@@ -1,0 +1,16 @@
+services:
+  render:
+    build: .
+    volumes:
+      - type: bind
+        source: .
+        target: /lndg
+      - type: bind
+        source: ../lnd/lnd-data
+        target: /root/.lnd
+        read_only: true
+    command:
+      - sh
+      - -c
+      - python initialize.py -net 'mainnet' -server 'localhost:10009' -d && supervisord && python manage.py runserver 0.0.0.0:8000
+    network_mode: "host"

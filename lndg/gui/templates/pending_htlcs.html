@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %} {{ block.super }} - HTLCs{% endblock %}
+{% block content %}
+{% load humanize %}
+{% if outgoing_htlcs %}
+<div class="w3-container w3-padding-small">
+  <h2>Outgoing HTLCs</h2>
+  <table class="w3-table-all w3-centered w3-hoverable">
+    <tr>
+      <th onclick="sortTable(event.target, 0, 'String')">Channel ID</th>
+      <th onclick="sortTable(event.target, 1, 'String')" width=10%>Channel Alias</th>
+      <th onclick="sortTable(event.target, 2, 'String')">Forwarding Channel</th>
+      <th onclick="sortTable(event.target, 3, 'String')" width=10%>Forwarding Alias</th>
+      <th onclick="sortTable(event.target, 4, 'int')">Amount</th>
+      <th onclick="sortTable(event.target, 5, 'int')">Expiration</th>
+      <th onclick="sortTable(event.target, 6, 'String')" width=25%>Hash Lock</th>
+    </tr>
+    {% for htlc in outgoing_htlcs %}
+    <tr>
+      <td><a href="/channel?={{ htlc.chan_id }}" target="_blank">{{ htlc.chan_id }}</a></td>
+      <td>{% if htlc.alias == '' %}---{% else %}{{ htlc.alias }}{% endif %}</td>
+      <td>{% if htlc.forwarding_channel == '0' %}Self{% else %}<a href="/channel?={{ htlc.forwarding_channel }}" target="_blank">{{ htlc.forwarding_channel }}</a>{% endif %}</td>
+      <td>{% if htlc.forwarding_alias == '' %}---{% else %}{{ htlc.forwarding_alias }}{% endif %}</td>
+      <td>{{ htlc.amount|intcomma }}</td>
+      <td title="{{ htlc.blocks_til_expiration|intcomma }} blocks to {{ htlc.expiration_height|intcomma }}">{{ htlc.hours_til_expiration }} hours</td>
+      <td><a href="/route?={{ htlc.hash_lock }}" target="_blank">{{ htlc.hash_lock }}</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %}
+{% if incoming_htlcs %}
+<div class="w3-container w3-padding-small">
+  <h2>Incoming HTLCs</h2>
+  <table class="w3-table-all w3-centered w3-hoverable">
+    <tr>
+      <th onclick="sortTable(event.target, 0, 'String')">Channel ID</th>
+      <th onclick="sortTable(event.target, 1, 'String')" width=10%>Channel Alias</th>
+      <th onclick="sortTable(event.target, 2, 'String')">Forwarding Channel</th>
+      <th onclick="sortTable(event.target, 3, 'String')" width=10%>Forwarding Alias</th>
+      <th onclick="sortTable(event.target, 4, 'int')">Amount</th>
+      <th onclick="sortTable(event.target, 5, 'int')">Expiration</th>
+      <th onclick="sortTable(event.target, 6, 'String')" width=25%>Hash Lock</th>
+    </tr>
+    {% for htlc in incoming_htlcs %}
+    <tr>
+      <td><a href="/channel?={{ htlc.chan_id }}" target="_blank">{{ htlc.chan_id }}</a></td>
+      <td>{% if htlc.alias == '' %}---{% else %}{{ htlc.alias }}{% endif %}</td>
+      <td>{% if htlc.forwarding_channel == '0' %}Self{% else %}<a href="/channel?={{ htlc.forwarding_channel }}" target="_blank">{{ htlc.forwarding_channel }}</a>{% endif %}</td>
+      <td>{% if htlc.forwarding_alias == '' %}---{% else %}{{ htlc.forwarding_alias }}{% endif %}</td>
+      <td>{{ htlc.amount|intcomma }}</td>
+      <td title="{{ htlc.blocks_til_expiration|intcomma }} blocks to {{ htlc.expiration_height|intcomma }}">{{ htlc.hours_til_expiration }} hours</td>
+      <td><a href="/route?={{ htlc.hash_lock }}" target="_blank">{{ htlc.hash_lock }}</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %}
+{% if not outgoing_htlcs and not incoming_htlcs %}
+<div class="w3-container w3-padding-small">
+  <center><h1>No pending HTLCs were found!</h1></center>
+</div>
+{% endif %}
+{% endblock %}

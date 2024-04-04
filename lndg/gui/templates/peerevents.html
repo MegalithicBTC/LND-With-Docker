@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %} {{ block.super }} - Peer Events{% endblock %}
+{% block content %}
+{% load humanize %}
+<div id="peerEventsDiv" class="w3-container w3-padding-small">
+  <h2>Last Peer Events</h2>
+  <table id="peerEventsTable" class="w3-table-all w3-centered w3-hoverable">
+    <tr>
+      <th>Timestamp</th>
+      <th onclick="sortTable(event.target, 1, 'String')">Channel ID</th>
+      <th onclick="sortTable(event.target, 2, 'String', 0, 'a')">Peer Alias</th>
+      <th onclick="sortTable(event.target, 3, 'String')">Setting</th>
+      <th onclick="sortTable(event.target, 4, 'String')">Old Value</th>
+      <th onclick="sortTable(event.target, 5, 'String')">New Value</th>
+      <th onclick="sortTable(event.target, 6, '%')">Change</th>
+      <th onclick="sortTable(event.target, 7, '% | ')" width=12% title="Outbound | Inbound"">Channel Liquidity</th>
+    </tr>
+    <tfoot id="loadMorePeerEvents">
+      <tr style="background-color:transparent;cursor:pointer;">
+        <td colspan="9">
+          <a onclick="loadPeerEvents()">Load More</a>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', async () =>{
+    const peerEventsTable = byId('peerEventsTable')
+    url_query = document.URL.split('?=')[1]
+    api_data = {wire_failure__lt: 99, limit: 50}
+    if(url_query){
+      api_data = {chan_id: url_query, limit: 50}
+    }else{
+      api_data = {limit: 50}
+    }
+    const peerEvents_task = GET('peerevents', {data: api_data })
+    let peer_events = (await peerEvents_task).results
+    if(peer_events.length == 0){
+      document.getElementById("peerEventsDiv").innerHTML = `<center><h1>You dont have any peer events yet.</h1></center>`
+      return
+    }
+    build_peerEvents(peer_events)
+  })
+  async function loadPeerEvents(){
+    const lastId = peerEventsTable.tBodies[0].lastChild.objId
+    api_data['id__lt'] = lastId
+    const peerEvents_task = GET('peerevents', {data: api_data })
+    let next_peer_events = (await peerEvents_task).results
+    if(next_peer_events.length==0){
+      byId("loadMorePeerEvents").style.display = "none"
+      return
+    }
+    build_peerEvents(next_peer_events)
+  }
+  async function build_peerEvents(peer_events){
+    const tableBody = peerEventsTable.querySelector("tbody")
+    for (f of peer_events){
+      tableBody.appendChild(use(peer_events_template).render(f))
+    }
+  }
+</script>
+{% endblock %}

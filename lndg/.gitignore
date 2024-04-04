@@ -1,0 +1,11 @@
+__pycache__
+db.sqlite3
+lndg/settings.py
+frontend
+node_modules
+lndg-admin.txt
+.vscode
+.vs
+gui/static/admin
+gui/static/rest_framework
+data/

@@ -1,0 +1,604 @@
+{% extends "base.html" %}
+{% block title %} {{ block.super }} - Channel Card{% endblock %}
+{% block content %}
+{% load humanize %}
+{% if channel %}
+<div class="w3-container w3-padding-small">
+  <h3><a href="{{ graph_links }}/{{ network }}node/{{ channel.remote_pubkey }}" target="_blank">{% if channel.alias != "" %}{{ channel.alias }}</a> | {{ channel.remote_pubkey }}{% else %}{{ channel.remote_pubkey }}</a>{% endif %}
+    <small class="w3-round w3-border-small w3-border-grey">{{ chan_id }}</small> <small class="w3-round w3-border-small w3-border-grey">{{ channel.short_chan_id }}</small>
+  </h3>
+  <span style="padding:1.5px 8px" title="{%if channel.private %}🕶️ Private{%else%}🌐 Public{%endif%} {% if channel.is_active and peer_info.connected %}Connected{%elif not channel.is_open %}Closed{% else %}Disconnected/Inactive{% endif %} Channel" class="w3-round w3-border w3-border-{% if channel.is_active and peer_info.connected %}green{%elif not channel.is_open %}gray{% else %}red{% endif %}">
+    {% if peer_info %}📍{{ peer_info.address }} | 
+    Channel Updates: {{ channel.num_updates|intcomma }} | 
+    {% if not channel.is_open %}❌ Closed:{% elif channel.is_active %}Uptime:{% else %}Downtime:{% endif %} {{ channel.last_update|naturaltime|slice:":-4" }} <small class="w3-round w3-border-small w3-border-grey">since {{ channel.last_update }}</small></h6>{% endif %} {%if channel.private %}🕶️{%else%}🌐{%endif%}
+  </span>
+  <div style="padding-top:5px"/>
+  <span style="padding:1.5px 8px;" class="w3-round w3-border w3-border-gray">
+    ⛓️ Channel Point: <a href="{{ network_links }}/{{ network }}tx/{{ channel.funding_txid }}" target="_blank">{{ channel.funding_txid }}:{{ channel.output_index }}</a> |
+    Opened In: <a href="{{ network_links }}/{{ network }}block/{{ channel.open_block }}" target="_blank">{{ channel.open_block|intcomma }}</a> | 
+    Opener: {% if channel.initiator == True %}Local{% else %}Remote{% endif %}
+  </span>
+</div>
+<br/>
+<div class="w3-row" style="text-align:center;max-width:1500px;">
+  <div class="w3-col l1 m1 s1" style="padding-top:10px">{{channel.local_balance|intcomma}} <small class="w3-round w3-border-small w3-border-grey">{{ channel.out_percent }}%</small></div>
+  <div class="w3-col l10 m10 s10">
+    <label >{{channel.capacity|intcomma}}</label>
+    <div class="progress w3-round w3-grey">
+      <span class="value w3-round w3-blue" style="width:{{channel.out_percent}}%"></span>
+    </div>
+  </div>
+  <div class="w3-col l1 m1 s1" style="padding-top:10px">{{channel.remote_balance|intcomma}} <small class="w3-round w3-border-small w3-border-grey">{{ channel.in_percent }}%</small></div>
+</div>
+<br/>
+<div class="w3-row w3-container w3-padding-small" >
+  <table class="w3-col w3-small w3-table-all w3-centered w3-hoverable" style="min-width:1000px;width:100%">
+    <thead>
+      <tr>
+        <th></th>
+        <th colspan="4">Routed</th>
+        <th colspan="3">Rebalanced</th>
+        <th colspan="7">Profitability</th>
+      </tr>
+    </thead>
+    <tr>
+      <th>Period</th>
+      <th>Out</th>
+      <th>In</th>
+      <th>Avg Out</th>
+      <th>Avg In</th>
+      <th>Out</th>
+      <th>In</th>
+      <th>Success</th>
+      <th>Revenue</th>
+      <th>Cost</th>
+      <th>Profit</th>
+      <th>Assisted Revenue</th>
+      <th>APY</th>
+      <th>iAPY</th>
+      <th>CV</th>
+    </tr>
+    <tr>
+      <th>1-Day</th>
+      <td>{{ channel.amt_routed_out_1day|intcomma }} <small class="w3-round w3-border-small w3-border-grey">{{ channel.routed_out_1day|intcomma }}</small></td>
+      <td>{{ channel.amt_routed_in_1day|intcomma }} <small class="w3-round w3-border-small w3-border-grey">{{ channel.routed_in_1day|intcomma }}</small></td>
+      <td>{{ channel.average_out_1day|intcomma }}</td>
+      <td>{{ channel.average_in_1day|intcomma }}</td>
+      <td>{{ channel.amt_rebal_out_1day|intcomma }} <small class="w3-round w3-border-small w3-border-grey">{{ channel.rebal_out_1day|intcomma }}</small></td>
+      <td>{{ channel.amt_rebal_in_1day|intcomma }} <small class="w3-round w3-border-small w3-border-grey">{{ channel.rebal_in_1day|intcomma }}</small></td>
+      <td>{{ channel.success_1day }}/{{ channel.attempts_1day }} <small class="w3-round w3-border-small w3-border-grey">{{ channel.success_rate_1day }}%</small></td>
+      <td>{{ channel.revenue_1day|intcomma }}</td>
+      <td>{{ channel.costs_1day|intcomma }}</td>
+      <td>{{ channel.profits_1day|intcomma }} [{{ channel.profits_vol_1day }}]</td>
+      <td>{{ channel.revenue_assist_1day|intcomma }}</td>
+      <td>{{ channel.apy_1day }}%</td>
+      <td>{{ channel.assisted_apy_1day }}%</td>
+      <td>{{ channel.cv_1day }}%</td>
+    </tr>
+    <tr>
+      <th>7-Day</th>
+      <td>{{ channel.amt_routed_out_7day|intcomma }} <small class="w3-round w3-border-small w3-border-grey">{{ channel.routed_out_7day|intcomma }}</small></td>
+      <td>{{ channel.amt_routed_in_7day|intcomma }} <small class="w3-round w3-border-small w3-border-grey">{{ channel.routed_in_7day|intcomma }}</small></td>
+      <td>{{ channel.average_out_7day|intcomma }}</td>
+      <td>{{ channel.average_in_7day|intcomma }}</td>
+      <td>{{ channel.amt_rebal_out_7day|intcomma }} <small class="w3-round w3-border-small w3-border-grey">{{ channel.rebal_out_7day|intcomma }}</small></td>
+      <td>{{ channel.amt_rebal_in_7day|intcomma }} <small class="w3-round w3-border-small w3-border-grey">{{ channel.rebal_in_7day|intcomma }}</small></td>
+      <td>{{ channel.success_7day }}/{{ channel.attempts_7day }} <small class="w3-round w3-border-small w3-border-grey">{{ channel.success_rate_7day }}%</small></td>
+      <td>{{ channel.revenue_7day|intcomma }}</td>
+      <td>{{ channel.costs_7day|intcomma }}</td>
+      <td>{{ channel.profits_7day|intcomma }} [{{ channel.profits_vol_7day }}]</td>
+      <td>{{ channel.revenue_assist_7day|intcomma }}</td>
+      <td>{{ channel.apy_7day }}%</td>
+      <td>{{ channel.assisted_apy_7day }}%</td>
+      <td>{{ channel.cv_7day }}%</td>
+    </tr>
+    <tr>
+      <th>30-Day</th>
+      <td>{{ channel.amt_routed_out_30day|intcomma }} <small class="w3-round w3-border-small w3-border-grey">{{ channel.routed_out_30day|intcomma }}</small></td>
+      <td>{{ channel.amt_routed_in_30day|intcomma }} <small class="w3-round w3-border-small w3-border-grey">{{ channel.routed_in_30day|intcomma }}</small></td>
+      <td>{{ channel.average_out_30day|intcomma }}</td>
+      <td>{{ channel.average_in_30day|intcomma }}</td>
+      <td>{{ channel.amt_rebal_out_30day|intcomma }} <small class="w3-round w3-border-small w3-border-grey">{{ channel.rebal_out_30day|intcomma }}</small></td>
+      <td>{{ channel.amt_rebal_in_30day|intcomma }} <small class="w3-round w3-border-small w3-border-grey">{{ channel.rebal_in_30day|intcomma }}</small></td>
+      <td>{{ channel.success_30day }}/{{ channel.attempts_30day }} <small class="w3-round w3-border-small w3-border-grey">{{ channel.success_rate_30day }}%</small></td>
+      <td>{{ channel.revenue_30day|intcomma }}</td>
+      <td>{{ channel.costs_30day|intcomma }}</td>
+      <td>{{ channel.profits_30day|intcomma }} [{{ channel.profits_vol_30day }}]</td>
+      <td>{{ channel.revenue_assist_30day|intcomma }}</td>
+      <td>{{ channel.apy_30day }}%</td>
+      <td>{{ channel.assisted_apy_30day }}%</td>
+      <td>{{ channel.cv_30day }}%</td>
+    </tr>
+    <tr>
+      <th>Lifetime</th>
+      <td>{{ channel.amt_routed_out|intcomma }} <small class="w3-round w3-border-small w3-border-grey">{{ channel.routed_out|intcomma }}</small></td>
+      <td>{{ channel.amt_routed_in|intcomma }} <small class="w3-round w3-border-small w3-border-grey">{{ channel.routed_in|intcomma }}</small></td>
+      <td>{{ channel.average_out|intcomma }}</td>
+      <td>{{ channel.average_in|intcomma }}</td>
+      <td>{{ channel.amt_rebal_out|intcomma }} <small class="w3-round w3-border-small w3-border-grey">{{ channel.rebal_out|intcomma }}</small></td>
+      <td>{{ channel.amt_rebal_in|intcomma }} <small class="w3-round w3-border-small w3-border-grey">{{ channel.rebal_in|intcomma }}</small></td>
+      <td>{{ channel.success }}/{{ channel.attempts }} <small class="w3-round w3-border-small w3-border-grey">{{ channel.success_rate }}%</small></td>
+      <td>{{ channel.revenue|intcomma }}</td>
+      <td>{{ channel.costs|intcomma }}</td>
+      <td>{{ channel.profits|intcomma }} [{{ channel.profits_vol }}]</td>
+      <td>{{ channel.revenue_assist|intcomma }}</td>
+      <td>{{ channel.apy }}%</td>
+      <td>{{ channel.assisted_apy }}%</td>
+      <td>{{ channel.cv }}%</td>
+    </tr>
+  </table>
+</div>
+<div class="w3-container w3-padding-small" style="overflow-x: scroll">
+  <h2>Channel Settings</h2>
+  <table class="w3-table-all w3-centered w3-hoverable">
+    <tr>
+      <th>AF</th>
+      <th>Updated</th>
+      <th title="The value represents net flow --> (routed out - routed in) / capacity">7Day Flow</th>
+      <th title="The average rate earned outgoing on this channel">Out Rate</th>
+      <th title="The average rate paid for rebalances to refill this channel">Rebal Rate</th>
+      <th title="When revenue > 0 --> assisted revenue / revenue">Assisted Ratio</th>
+      <th>Adjustment</th>
+      <th title="A suggested fee rate based on the flow pattern over the last 7 days">Suggested Rate</th>
+      <th>Channel State</th>
+      <th>oRate</th>
+      <th>oBase</th>
+      <th>iRate</th>
+      <th>iBase</th>
+      <th title="When AR is ENABLED for the channel, the size of the rebalance attempts that should be tried during attempts to refill the channel.">Target Amt</th>
+      <th title="When AR is ENABLED, the maximum percentage amount of the local fee rate that can be used for the max rebalancing cost.">Max Cost %</th>
+      <th title="When AR is NOT ENABLED for the channel, keep pushing OUT the channel until its outbound liquidity falls below the oTarget%.">oTarget%</th>
+      <th title="When AR is ENABLED for the channel, keep pulling IN to the channel until its inbound liquidity falls below the iTarget%.">iTarget%</th>
+      <th title="When AR is ENABLED it will refill the channel with outbound liquidity.">AR</th>
+      <th>Rebal In?</th>
+      <th>Active</th>
+    </tr>
+    <tr>
+      <td style="background-color: {% if channel.auto_fees == False %}rgba(248,81,73,0.15){% else %}rgba(56,139,253,0.15){% endif %}">
+        <form action="/update_channel/" method="post">
+          {% csrf_token %}
+          <input type="submit" value="{% if channel.auto_fees == True %}Disable{% else %}Enable{% endif %}">
+          <input type="hidden" name="chan_id" value="{{ channel.chan_id }}">
+          <input type="hidden" name="update_target" value="8">
+          <input type="hidden" name="target" value="0">
+        </form>
+      </td>
+      <td style="background-color: {% if channel.eligible == True %}rgba(248,81,73,0.15){% else %}rgba(56,139,253,0.15){% endif %}">{{ channel.fees_updated|naturaltime }}</td>
+      <td>{% if channel.net_routed_7day > 0 %}OUT{% elif channel.net_routed_7day < 0 %}IN{% else %}---{% endif %}{% if channel.net_routed_7day != 0 %} | {{ channel.net_routed_7day }}{% endif %}</td>
+      <td>{{ channel.out_rate }}</td>
+      <td>{{ channel.rebal_ppm }}</td>
+      <td>{{ channel.assisted_ratio }}</td>
+      <td>{{ channel.adjustment }}</td>
+      <td>{{ channel.new_rate|intcomma }}</td>
+      <td style="background-color: {% if channel.local_disabled == True %}rgba(248,81,73,0.15){% else %}rgba(56,139,253,0.15){% endif %}">
+        {% if channel.is_active == True %}
+          <form action="/update_channel/" method="post">
+            {% csrf_token %}
+            <input type="submit" value="{% if channel.local_disabled == False %}Disable{% else %}Enable{% endif %}">
+            <input type="hidden" name="chan_id" value="{{ channel.chan_id }}">
+            <input type="hidden" name="update_target" value="7">
+            <input type="hidden" name="target" value="{% if channel.local_disabled == False %}0{% else %}1{% endif %}">
+          </form>
+        {% else %}
+          ---
+        {% endif %}
+      </td>
+      <td style="background-color: {% if channel.local_disabled == True %}rgba(248,81,73,0.15){% else %}rgba(56,139,253,0.15){% endif %}">
+        <form action="/update_channel/" method="post">
+          {% csrf_token %}
+          <input style="text-align:center" id="target" type="number" min="0" size="6" max="100000" name="target" value="{{ channel.local_fee_rate }}">
+          <input type="hidden" name="chan_id" value="{{ channel.chan_id }}">
+          <input type="hidden" name="update_target" value="1">
+        </form>
+      </td>
+      <td style="background-color: {% if channel.local_disabled == True %}rgba(248,81,73,0.15){% else %}rgba(56,139,253,0.15){% endif %}">
+        <form action="/update_channel/" method="post">
+          {% csrf_token %}
+          <input style="text-align:center" id="target" type="number" min="0" size="6" max="100000" name="target" value="{{ channel.local_base_fee }}">
+          <input type="hidden" name="chan_id" value="{{ channel.chan_id }}">
+          <input type="hidden" name="update_target" value="0">
+        </form>
+      </td>
+      <td title="Fee Ratio: {{ channel.fee_ratio }}%" {% if channel.remote_disabled == True %}style="background-color: rgba(248,81,73,0.15);"{% else %}style="background-color: rgba(56,139,253,0.15)"{% endif %}>{{ channel.remote_fee_rate|intcomma }}</td>
+      <td {% if channel.remote_disabled == True %}style="background-color: rgba(248,81,73,0.15);"{% else %}style="background-color: rgba(56,139,253,0.15)"{% endif %}>{{ channel.remote_base_fee|intcomma }}</td>
+      <td>
+        <form action="/update_channel/" method="post">
+          {% csrf_token %}
+          <input style="text-align:center" id="target" type="number" min="0" size="9" max="100000000" name="target" value="{{ channel.ar_amt_target }}">
+          <input type="hidden" name="chan_id" value="{{ channel.chan_id }}">
+          <input type="hidden" name="update_target" value="2">
+        </form>
+      </td>
+      <td>
+        <form action="/update_channel/" method="post">
+          {% csrf_token %}
+          <input style="text-align:center" id="target" type="number" min="0" size="3" max="100" name="target" value="{{ channel.ar_max_cost }}">
+          <input type="hidden" name="chan_id" value="{{ channel.chan_id }}">
+          <input type="hidden" name="update_target" value="6">
+        </form>
+      </td>
+      <td style="background-color: {% if channel.auto_rebalance == False %}rgba(56,139,253,0.15){% else %}rgba(248,81,73,0.15){% endif %}">
+          <form action="/update_channel/" method="post">
+            {% csrf_token %}
+            <input style="text-align:center" id="target" type="number" min="0" size="3" max="100" name="target" value="{{ channel.ar_out_target }}">
+            <input type="hidden" name="chan_id" value="{{ channel.chan_id }}">
+            <input type="hidden" name="update_target" value="4">
+          </form>
+      </td>
+      <td style="background-color: {% if channel.auto_rebalance == True %}rgba(56,139,253,0.15){% else %}rgba(248,81,73,0.15){% endif %}">
+          <form action="/update_channel/" method="post">
+            {% csrf_token %}
+            <input style="text-align:center" id="target" type="number" min="0" size="3" max="100" name="target" value="{{ channel.ar_in_target }}">
+            <input type="hidden" name="chan_id" value="{{ channel.chan_id }}">
+            <input type="hidden" name="update_target" value="3">
+          </form>
+      </td>
+      <td style="background-color: {% if channel.auto_rebalance == True %}rgba(56,139,253,0.15){% else %}rgba(248,81,73,0.15){% endif %}">
+        <form action="/update_channel/" method="post">
+          {% csrf_token %}
+          <input type="submit" value="{% if channel.auto_rebalance == True %}Disable{% else %}Enable{% endif %}">
+          <input type="hidden" name="chan_id" value="{{ channel.chan_id }}">
+          <input type="hidden" name="update_target" value="5">
+          <input type="hidden" name="target" value="0">
+        </form>
+      </td>
+      <td style="background-color: {% if channel.inbound_can >= 1 and channel.fee_check < 100 and channel.auto_rebalance == True %}rgba(56,139,253,0.15){% else %}rgba(248,81,73,0.15){% endif %}">{% if channel.inbound_can >= 1 and channel.fee_check < 100 and channel.auto_rebalance == True %}True{% else %}False{% endif %} <small class="w3-round w3-border-small w3-border-grey">{{ channel.steps }}</small></td>
+      <td title="{% if channel.is_active == True %}Uptime: {{ channel.last_update|naturaltime|slice:":-4" }}{% else %}Downtime: {{ channel.last_update|naturaltime|slice:":-4" }}{% endif %}" {% if channel.is_active  == True %}style="background-color: rgba(56,139,253,0.15)">True{% else %}style="background-color: rgba(248,81,73,0.15);">False{% endif %}</td>
+    </tr>
+  </table>
+</div>
+{% if outgoing_htlcs %}
+<div class="w3-container w3-padding-small">
+  <h2>Outgoing HTLCs</h2>
+  <table class="w3-table-all w3-centered w3-hoverable">
+    <tr>
+      <th>Forwarding Channel</th>
+      <th>Forwarding Alias</th>
+      <th>Amount</th>
+      <th>Expiration Height</th>
+      <th width=35%>Hash Lock</th>
+    </tr>
+    {% for htlc in outgoing_htlcs %}
+    <tr>
+      <td>{% if htlc.forwarding_channel == '0' %}Self{% else %}<a href="/channel?={{ htlc.forwarding_channel }}" target="_blank">{{ htlc.forwarding_channel }}</a>{% endif %}</td>
+      <td>{% if htlc.forwarding_alias == '' %}---{% else %}{{ htlc.forwarding_alias }}{% endif %}</td>
+      <td>{{ htlc.amount|intcomma }}</td>
+      <td>{{ htlc.expiration_height|intcomma }}</td>
+      <td><a href="/route?={{ htlc.hash_lock }}" target="_blank">{{ htlc.hash_lock }}</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %}
+{% if incoming_htlcs %}
+<div class="w3-container w3-padding-small">
+  <h2>Incoming HTLCs</h2>
+  <table class="w3-table-all w3-centered w3-hoverable">
+    <tr>
+      <th>Forwarding Channel</th>
+      <th>Forwarding Alias</th>
+      <th>Amount</th>
+      <th>Expiration Height</th>
+      <th width=35%>Hash Lock</th>
+    </tr>
+    {% for htlc in incoming_htlcs %}
+    <tr>
+      <td>{% if htlc.forwarding_channel == '0' %}Self{% else %}<a href="/channel?={{ htlc.forwarding_channel }}" target="_blank">{{ htlc.forwarding_channel }}</a>{% endif %}</td>
+      <td>{% if htlc.forwarding_alias == '' %}---{% else %}{{ htlc.forwarding_alias }}{% endif %}</td>
+      <td>{{ htlc.amount|intcomma }}</td>
+      <td>{{ htlc.expiration_height|intcomma }}</td>
+      <td>{{ htlc.hash_lock }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %}
+{% if autofees %}
+<div class="w3-container w3-padding-small">
+  <h2><a href="/autofees/">30 Days Our Fees Logs</a></h2>
+  <table class="w3-table-all w3-centered w3-hoverable">
+    <tr>
+      <th>Timestamp</th>
+      <th>Channel ID</th>
+      <th>Peer Alias</th>
+      <th>Setting</th>
+      <th>Old Value</th>
+      <th>New Value</th>
+      <th>Change</th>
+    </tr>
+    {% for log in autofees %}
+    <tr>
+      <td title="{{ log.timestamp }}">{{ log.timestamp|naturaltime }}</td>
+      <td><a href="/channel?={{ log.chan_id }}" target="_blank">{{ log.chan_id }}</a></td>
+      <td><a href="/autofees?={{ log.chan_id }}" target="_blank">{% if log.peer_alias == '' %}{{ channel.remote_pubkey|slice:":12" }}{% else %}{{ log.peer_alias }}{% endif %}</a></td>
+      <td>{{ log.setting }}</td>
+      <td>{{ log.old_value }}</td>
+      <td {% if log.new_value > log.old_value %}style="background-color: rgba(46,160,67,0.15)"{% else %}style="background-color: rgba(248,81,73,0.15);"{% endif %}>{{ log.new_value }}</td>
+      <td {% if log.new_value > log.old_value %}style="background-color: rgba(46,160,67,0.15)"{% else %}style="background-color: rgba(248,81,73,0.15);"{% endif %}>{{ log.change }}%</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %}
+<div id="forwardsDiv" class="w3-container w3-padding-small">
+  <h2>Last <a href="/forwards" target="_blank">Payments Routed</a></h2>
+  <table id="forwardsTable" class="w3-table-all w3-centered w3-hoverable">
+    <tr>
+      <th>Timestamp</th>
+      <th>Channel In Id</th>
+      <th>Channel In Alias</th>
+      <th colspan="2">Amount In</th>
+      <th colspan="2">Amount Out</th>
+      <th>Channel Out Alias</th>
+      <th>Channel Out Id</th>
+      <th>Fees Earned</th>
+      <th>PPM Earned</th>
+    </tr>
+    <tfoot id="loadMoreForwards">
+      <tr style="background-color:transparent;cursor:pointer;">
+        <td colspan="11">
+          <a onclick="loadForwards()">Load More</a>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+<div id="rebalancerDiv">
+{% autoescape off %}
+  {% with rebal_url='<a href="/rebalances?last_hop_pubkey='|add:channel.remote_pubkey|add:'" target:"_blank">'|add:channel.alias|add:' Rebalances</a>'%}
+    {% include 'rebalances_table.html' with count=5 last_hop_pubkey=channel.remote_pubkey load_count=5 title=rebal_url %}
+  {% endwith %}
+{% endautoescape %}
+</div>
+<div id="paymentsDiv" class="w3-container w3-padding-small">
+  <h2>Last 5 <a href="/payments" target="_blank">Payments Sent</a></h2>
+  <table id="paymentsTable" class="w3-table-all w3-centered w3-hoverable">
+    <tr>
+      <th>Timestamp</th>
+      <th>Value</th>
+      <th>Fee Paid</th>
+      <th>PPM Paid</th>
+      <th>Status</th>
+      <th>Chan Out Alias</th>
+      <th>Chan Out ID</th>
+      <th>Hash</th>
+      <th>Rebalance</th>
+      <th>Keysend</th>
+    </tr>
+    <tfoot id="loadMorePayments">
+      <tr style="background-color:transparent;cursor:pointer;">
+        <td colspan="10">
+          <a onclick="loadPayments()">Load More</a>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+<div id="invoicesDiv" class="w3-container w3-padding-small">
+  <h2>Last 5 <a href="/invoices" target="_blank">Payments Received</a></h2>
+  <table id="invoicesTable" class="w3-table-all w3-centered w3-hoverable">
+    <tr>
+      <th>Created</th>
+      <th>Settled</th>
+      <th>Value</th>
+      <th>Amount Paid</th>
+      <th>State</th>
+      <th>Channel In Alias</th>
+      <th>Channel In</th>
+      <th>Hash</th>
+      <th><a href="/keysends" target="_blank">Keysend</a></th>
+    </tr>
+    <tfoot id="loadMoreInvoices">
+      <tr style="background-color:transparent;cursor:pointer;">
+        <td colspan="9">
+          <a onclick="loadInvoices()">Load More</a>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+<div id="failedhtlcsDiv" class="w3-container w3-padding-small">
+  <h2>Last <a href="/failed_htlcs?={{chan_id}}_O" target="_blank">Failed HTLCs</a></h2>
+  <table id="failedhtlcsTable" class="w3-table-all w3-centered w3-hoverable">
+    <tr>
+      <th>Timestamp</th>
+      <th>Chan In ID</th>
+      <th>Chan In Alias</th>
+      <th colspan="2">Forward Amount</th>
+      <th colspan="2">Actual Outbound</th>
+      <th>Chan Out Alias</th>
+      <th>Chan Out ID</th>
+      <th>Potential Fee</th>
+      <th>HTLC Failure</th>
+      <th>Failure Detail</th>
+    </tr>
+    <tfoot id="loadMoreFailedHTLCs">
+      <tr style="background-color:transparent;cursor:pointer;">
+        <td colspan="12">
+          <a onclick="loadFailedHTLCs()">Load More</a>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+  <h4>Failed Due To Insufficient Balance:
+    <small class="w3-round w3-border-small w3-border-grey">1-Day: {{ channel.failed_out_1day }}</small>
+    <small class="w3-round w3-border-small w3-border-grey">7-Day: {{ channel.failed_out_7day }}</small>
+    <small class="w3-round w3-border-small w3-border-grey">30-Day: {{ channel.failed_out_30day }}</small>
+    <small class="w3-round w3-border-small w3-border-grey">Lifetime: {{ channel.failed_out }}</small>
+  </h4>
+</div>
+<div id="peerEventsDiv" class="w3-container w3-padding-small">
+  <h2>Last <a href="/peerevents">Peer Log Events</a></h2>
+  <table id="peerEventsTable" class="w3-table-all w3-centered w3-hoverable">
+    <tr>
+      <th>Timestamp</th>
+      <th>Channel ID</th>
+      <th>Peer Alias</th>
+      <th>Setting</th>
+      <th>Old Value</th>
+      <th>New Value</th>
+      <th>Change</th>
+      <th width=13% title="Outbound | Inbound">Channel Liquidity</th>
+    </tr>
+    <tfoot id="loadMorePeerEvents">
+      <tr style="background-color:transparent;cursor:pointer;">
+        <td colspan="8">
+          <a onclick="loadPeerEvents()">Load More</a>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+<div class="w3-container w3-padding-small">
+  <h2>Channel Notes</h2>
+  <textarea id="w3review" name="w3review" rows="5" style="width:100%" onChange="Sync.PUT('channels/{{ chan_id }}', {body: {notes: this.value}}, r => {flash(this, r.notes)});">{{ channel.notes }}</textarea>
+</div>
+{% endif %}
+{% if not channel %}
+<div class="w3-container w3-padding-small">
+  <center><h1>No data found for this channel!</h1></center>
+</div>
+{% endif %}
+<script>
+  document.addEventListener('DOMContentLoaded', async () =>{
+    const forwardsTable = byId('forwardsTable')
+    const paymentsTable = byId('paymentsTable')
+    const invoicesTable = byId('invoicesTable')
+    const failedhtlcsTable = byId('failedhtlcsTable')
+    const peerEventsTable = byId('peerEventsTable')
+    const forwards_task = GET('forwards', {data: {chan_in_or_out: "{{ chan_id }}", limit: 5} })
+    const payments_task = GET('payments', {data: {chan_out: "{{ chan_id }}", status__lt: 3, limit: 5} })
+    const invoices_task = GET('invoices', {data: {chan_in: "{{ chan_id }}", state__lt: 2, limit: 5} })
+    const failedhtlcs_task = GET('failedhtlcs', {data: {chan_in_or_out: "{{ chan_id}}", wire_failure__lt: 99, limit: 5} })
+    const peerEvents_task = GET('peerevents', {data: {chan_id: "{{ chan_id}}", limit: 5} })
+    let failed_htlcs = (await failedhtlcs_task).results
+    let peer_events = (await peerEvents_task).results
+    let forwards = (await forwards_task).results
+    let payments = (await payments_task).results
+    let invoices = (await invoices_task).results
+    if(byId('rebalsTable_')==null){
+      byId("rebalancerDiv").style.display = "none"
+    }
+    if(failed_htlcs.length==0){
+      byId("failedhtlcsDiv").style.display = "none"
+    }else{
+      build_failedhtlcs(failed_htlcs)
+    }
+    if(peer_events.length==0){
+      byId("peerEventsDiv").style.display = "none"
+    }else{
+      build_peerEvents(peer_events)
+    }
+    if(forwards.length==0){
+      byId("forwardsDiv").style.display = "none"
+    }else{
+      build_routed(forwards)
+    }
+    if(payments.length==0){
+      byId("paymentsDiv").style.display = "none"
+    }else{
+      build_payments(payments)
+    }
+    if(invoices.length==0){
+      byId("invoicesDiv").style.display = "none"
+    }else{
+      build_invoices(invoices)
+    }
+  })
+  async function loadForwards(){
+    const lastId = forwardsTable.tBodies[0].lastChild.objId
+    const forwards_task = GET('forwards', {data: {chan_in_or_out: "{{ chan_id }}", id__lt: lastId, limit: 5} })
+    let forwards = (await forwards_task).results
+    build_routed(forwards)
+  }
+  async function build_routed(next_forwards){
+    if(next_forwards.length<5){
+      byId("loadMoreForwards").style.display = "none"
+    }
+    if(next_forwards.length==0){
+      return
+    }
+    const tableBody = forwardsTable.querySelector("tbody")
+    for (f of next_forwards){
+      f.amt_in = f.amt_in_msat/1000
+      f.amt_out = f.amt_out_msat/1000
+      f.ppm = f.fee*1000000/f.amt_out
+      tableBody.appendChild(use(routed_template).render(f))
+    }
+  }
+  async function loadPayments(){
+    const lastId = paymentsTable.tBodies[0].lastChild.objId
+    const payments_task = GET('payments', {data: {chan_out: "{{ chan_id }}", index__lt: lastId, status__lt: 3, limit: 5} })
+    let next_payments = (await payments_task).results
+    build_payments(next_payments)
+  }
+  async function build_payments(payments){
+    if(payments.length<5){
+      byId("loadMorePayments").style.display = "none"
+    }
+    if(payments.length==0){
+      return
+    }
+    const tableBody = paymentsTable.querySelector("tbody")
+    for (p of payments){
+      p.ppm = p.fee*1000000/p.value
+      tableBody.appendChild(use(payments_template).render(p))
+    }
+  }
+  async function loadInvoices(){
+    const lastId = invoicesTable.tBodies[0].lastChild.objId
+    const invoices_task = GET('invoices', {data: {chan_out: "{{ chan_id }}", index__lt: lastId, state__lt: 2, limit: 5} })
+    let next_invoices = (await invoices_task).results
+    build_invoices(next_invoices)
+  }
+  async function build_invoices(invoices){
+    if(invoices.length<5){
+      byId("loadMoreInvoices").style.display = "none"
+    }
+    if(invoices.length==0){
+      return
+    }
+    const tableBody = invoicesTable.querySelector("tbody")
+    const renderer = use(invoices_template)
+    for (inv of invoices){
+      tableBody.appendChild(renderer.render(inv))
+    }
+  }
+  async function loadFailedHTLCs(){
+    const lastId = failedhtlcsTable.tBodies[0].lastChild.objId
+    const failedhtlcs_task = GET('failedhtlcs', {data: {chan_in_or_out: "{{ chan_id}}", wire_failure__lt: 99, id__lt: lastId, limit: 5} })
+    let next_failed_htlcs = (await failedhtlcs_task).results
+    if(next_failed_htlcs.length<5){
+      byId("loadMoreFailedHTLCs").style.display = "none"
+    }    
+    if(next_failed_htlcs.length==0){
+      return
+    }
+    build_failedhtlcs(next_failed_htlcs)
+  }
+  async function build_failedhtlcs(failed_htlcs){
+    const tableBody = failedhtlcsTable.querySelector("tbody")
+    for (f of failed_htlcs){
+      tableBody.appendChild(use(failedHTLCs_template).render(f))
+    }
+  }
+  async function loadPeerEvents(){
+    const lastId = peerEventsTable.tBodies[0].lastChild.objId
+    const peerEvents_task = GET('peerevents', {data: {chan_id: "{{ chan_id}}", id__lt: lastId, limit: 5} })
+    let next_peer_events = (await peerEvents_task).results
+    if(next_peer_events.length<5){
+      byId("loadMorePeerEvents").style.display = "none"
+    }
+    if(next_peer_events.length==0){
+      return
+    }
+    build_peerEvents(next_peer_events)
+  }
+  async function build_peerEvents(peer_events){
+    const tableBody = peerEventsTable.querySelector("tbody")
+    for (f of peer_events){
+      tableBody.appendChild(use(peer_events_template).render(f))
+    }
+  }
+</script>
+{% endblock %}
