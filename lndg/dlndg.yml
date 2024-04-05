@@ -1,5 +1,5 @@
 services:
-  render:
+  lndg:
     build: .
     volumes:
       - type: bind
