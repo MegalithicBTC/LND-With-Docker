@@ -1,0 +1,22 @@
+services:
+  lnd:
+    image: lightninglabs/lnd:v0.17.4-beta@sha256:668eba1fdb1ac520292db95a57059be91895fb8af076eafd6c8b5e757f0f196c
+    command: "ls"
+    user: 1000:1000
+    volumes:
+      - type: bind
+        source: ./lnd-data
+        target: /data/.lnd
+      - type: bind
+        source: ./lnd.conf
+        target: /data/.lnd/lnd-watchtower.conf
+      - type: bind
+        source: .
+        target: /lnd_folder_root
+      - type: bind
+        source: ../tmp
+        target: /tmp
+    environment:
+      HOME: /data
+    network_mode: host
+    
