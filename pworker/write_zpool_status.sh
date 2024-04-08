@@ -1,0 +1,1 @@
+python3 ./pworker/write_zpool_status.py
