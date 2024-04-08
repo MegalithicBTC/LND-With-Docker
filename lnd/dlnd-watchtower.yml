@@ -8,8 +8,8 @@ services:
         source: ./lnd-data
         target: /data/.lnd
       - type: bind
-        source: ./lnd.conf
-        target: /data/.lnd/lnd-watchtower.conf
+        source: ./lnd-watchtower.conf
+        target: /data/.lnd/lnd.conf
       - type: bind
         source: .
         target: /lnd_folder_root
