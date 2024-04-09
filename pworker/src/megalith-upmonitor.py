@@ -19,7 +19,10 @@ def metadata_callback(context, callback):
 
 os.environ["GRPC_SSL_CIPHER_SUITES"] = 'HIGH+ECDSA'
 
-cert = open(os.path.expanduser('/workspace/bound_lnd_folder/lnd-data/tls.cert'), 'rb').read()
+
+
+
+cert = open(os.path.expanduser('/workspace/lightning/lnd/lnd-data/tls.cert'), 'rb').read()
 # print(cert)
 # creds = grpc.ssl_channel_credentials(cert)
 # channel = grpc.secure_channel('127.0.0.1:10009', creds)

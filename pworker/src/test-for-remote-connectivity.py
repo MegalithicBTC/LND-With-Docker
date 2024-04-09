@@ -118,7 +118,7 @@ def measure_connection_times(rabbit_channel):
 
 rabbit_url = os.getenv("RABBITMQ_URL", "unk-url")
 params = pika.URLParameters(rabbit_url + "?heartbeat=500")
-connection = pika.BlockingConnection(params)  # Connect to CloudAMQP
+connection = pika.BlockingConnection(params)  
 channel = connection.channel()
 channel.basic_qos(prefetch_count=1)
 heartbeat = 30

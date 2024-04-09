@@ -18,5 +18,8 @@ services:
         target: /tmp
     environment:
       HOME: /data
+      EXTERNAL_IP: 0
+      SKIP_PROXY_FOR_CLEARNET_TARGETS: false
+      LISTEN: 0
     network_mode: host
     
