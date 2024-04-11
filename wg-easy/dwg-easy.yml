@@ -8,7 +8,7 @@ services:
       - LANG=en
       # ⚠️ Required:
       # Change this to your host's public address
-      - WG_HOST=144.126.220.188
+      #- 
 
       # Optional:
       # - PASSWORD=foobar123
@@ -26,6 +26,8 @@ services:
       # - UI_CHART_TYPE=0 # (0 Charts disabled, 1 # Line chart, 2 # Area chart, 3 # Bar chart)
 
     image: ghcr.io/wg-easy/wg-easy
+    env_file:
+      - ./SECRETS/secrets.env
     container_name: wg-easy
     volumes:
       # - /lib/modules:/lib/modules
@@ -42,3 +44,4 @@ services:
     sysctls:
       - net.ipv4.ip_forward=1
       - net.ipv4.conf.all.src_valid_mark=1
+   
