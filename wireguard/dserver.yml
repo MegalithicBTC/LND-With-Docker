@@ -4,7 +4,7 @@ services:
     container_name: wireguard
     cap_add:
       - NET_ADMIN
-      - SYS_MODULE #optional
+      # - SYS_MODULE #optional
     environment:
       - TZ=Etc/UTC
       - SERVERURL=auto
@@ -17,6 +17,7 @@ services:
       - PERSISTENTKEEPALIVE_PEERS=1 #optional
       - LOG_CONFS=false #optional
     volumes:
+      # - /lib/modules:/lib/modules
       - type: bind
         source: ./server_config
         target: /config
@@ -24,5 +25,5 @@ services:
       - 51820:51820/udp
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
-      - net.ipv4.ip_forward=1
-    #restart: unless-stopped
+      #- net.ipv4.ip_forward=1
+ 
