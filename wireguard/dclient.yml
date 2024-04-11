@@ -9,17 +9,15 @@ services:
       - TZ=Etc/UTC
       - SERVERURL=auto
       - SERVERPORT=51820 #optional
-      - PEERS=1 #optional
-      - PEERDNS=auto #optional
-      - INTERNAL_SUBNET=10.13.13.0 #optional
       - ALLOWEDIPS=0.0.0.0/0 #optional
-      #- ALLOWEDIPS=10.13.13.0/24,  172.17.0.1/32, 192.168.1.0/24
-      - PERSISTENTKEEPALIVE_PEERS=1 #optional
       - LOG_CONFS=false #optional
     volumes:
       - type: bind
-        source: ./server_config
-        target: /config
+        source: ./config
+        target: /server_config
+    # volumes:
+    #   - /path/to/appdata/config:/config
+    #   - /lib/modules:/lib/modules #optional
     ports:
       - 51820:51820/udp
     sysctls:
