@@ -20,3 +20,5 @@ pworker/zpool_status/*
 !/wireguard/client_config/wg_confs/.keep
 /wg-easy/etc_wireguard/*
 !/wg-easy/etc_wireguard/.keep
+**/SECRETS/*
+!**/SECRETS/.keep
