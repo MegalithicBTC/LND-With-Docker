@@ -8,12 +8,11 @@
 !/tor/tor-data/.keep
 /tmp/*
 !/tmp/.keep
-pworker/googleapis
-pworker/googleapis/
-pworker/googleapis/*
 pworker/zpool_status/*
 /pworker/zpool_status/*
 !/pworker/zpool_status/.keep
 **.pyc
 /lndg/data/*
 !/lndg/data/.keep
+/wireguard/config/*
+!/wireguard/config/.keep
