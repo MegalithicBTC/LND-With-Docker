@@ -1,6 +1,4 @@
 version: "3.8"
-volumes:
-  etc_wireguard:
 
 services:
   wg-easy:
