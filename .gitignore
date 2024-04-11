@@ -14,5 +14,7 @@ pworker/zpool_status/*
 **.pyc
 /lndg/data/*
 !/lndg/data/.keep
-/wireguard/config/*
-!/wireguard/config/.keep
+/wireguard/server_config/*
+!/wireguard/server_config/.keep
+/wireguard/client_config/*
+!/wireguard/client_config/.keep

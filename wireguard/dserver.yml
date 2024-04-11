@@ -19,7 +19,7 @@ services:
     volumes:
       - type: bind
         source: ./config
-        target: /config
+        target: /server_config
     # volumes:
     #   - /path/to/appdata/config:/config
     #   - /lib/modules:/lib/modules #optional
