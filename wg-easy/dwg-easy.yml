@@ -21,7 +21,7 @@ services:
       - UI_CHART_TYPE=1 
     image: ghcr.io/wg-easy/wg-easy
     env_file:
-      - ./SECRETS/secrets.env
+      - ./PRIVATE/private.env
     container_name: wg-easy
     volumes:
       - type: bind
