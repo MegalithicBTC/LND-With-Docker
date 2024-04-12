@@ -17,7 +17,7 @@ services:
       command: >
               sh -c "python3 watch_backups.py"
       env_file:
-        - ../../secrets.env
+        - ./PRIVATE/secrets.env
   upmonitor:
       user: "1000:1000"
       tty: true
@@ -34,7 +34,7 @@ services:
       command: >
               sh -c "python3 src/megalith-upmonitor.py"
       env_file:
-        - ../../secrets.env
+        - ./PRIVATE/secrets.env
   lnd_folder_backup:
       user: "1000:1000"
       tty: true
@@ -51,4 +51,4 @@ services:
       command: >
               sh -c "python3 src/backup_lnd_folder_to_s3.py"
       env_file:
-        - ../../secrets.env
+        - ./PRIVATE/secrets.env
