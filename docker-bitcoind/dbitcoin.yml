@@ -10,7 +10,7 @@ services:
         source: ./bitcoind-data
         target: /bitcoin/.bitcoin
       - type: bind
-        source: ./bitcoin.conf
+        source: ./PRIVATE/bitcoin.conf
         target: /bitcoin/.bitcoin/bitcoin.conf
 
     network_mode: host
