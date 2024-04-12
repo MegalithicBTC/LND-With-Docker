@@ -8,8 +8,11 @@ services:
         source: ./lnd-data
         target: /data/.lnd
       - type: bind
-        source: ./lnd-watchtower.conf
+        source: ./PRIVATE/lnd-watchtower.conf
         target: /data/.lnd/lnd.conf
+      - type: bind
+        source: ./PRIVATE/lnd-unlock-password.txt
+        target: /PRIVATE/lnd-unlock-password.txt
       - type: bind
         source: .
         target: /lnd_folder_root
