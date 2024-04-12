@@ -8,7 +8,7 @@ services:
         source: ./lnd-data
         target: /data/.lnd
       - type: bind
-        source: ./lnd.conf
+        source: ./PRIVATE/lnd.conf
         target: /data/.lnd/lnd.conf
       - type: bind
         source: .
