@@ -22,3 +22,4 @@ pworker/zpool_status/*
 !/wg-easy/etc_wireguard/.keep
 **/PRIVATE/*
 !**/PRIVATE/.keep
+/wg-easy/certs/*

@@ -1,5 +1,16 @@
 
 services:
+  caddy:
+    image: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./PRIVATE/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config 
   wg-easy:
     environment:
       - LANG=en
@@ -38,4 +49,6 @@ services:
     sysctls:
       - net.ipv4.ip_forward=1
       - net.ipv4.conf.all.src_valid_mark=1
-   
+volumes:
+  caddy_data:
+  caddy_config:
