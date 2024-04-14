@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   watch_backups:
       user: "1000:1000"
@@ -18,7 +16,7 @@ services:
               sh -c "python3 watch_backups.py"
       env_file:
         - ./PRIVATE/secrets.env
-  upmonitor:
+  send-node-status-to-queue:
       user: "1000:1000"
       tty: true
       build:
