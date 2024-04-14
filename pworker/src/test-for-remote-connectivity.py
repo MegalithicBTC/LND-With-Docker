@@ -40,10 +40,10 @@ combined_creds = grpc.composite_channel_credentials(cert_creds, auth_creds)
 channel = grpc.secure_channel('localhost:10009', combined_creds)    
 stub = lnrpc.LightningStub(channel)
 
-CLEARNET_ADDRESS = ""
+NODE_FULL_NODE_ADDRESS = os.getenv("MAIN_LND_NODE_ADDRESS")
 
-PUB_KEY = ""
-CLEARNET_HOST = ""
+PUB_KEY = 
+CLEARNET_HOST = 
 def disconnect():
     try: 
         request = ln.DisconnectPeerRequest(
@@ -60,7 +60,6 @@ def measure_connection_times(rabbit_channel):
     print('sleep after disconnect')
     time.sleep(2)
     print('testing clearnet')
-    print('clearnet address', CLEARNET_ADDRESS)
     is_in_error = False
     error_message =""
     connection_time = None
