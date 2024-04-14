@@ -1,15 +1,15 @@
 version: "3"
 
 services:
-  render:
+  queue-listeners:
     tty: true
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
       - type: bind
-          source: .
-          target: /workspace/lightning/pworker
+        source: .
+        target: /workspace/lightning/pworker
     command: >
       sh -c "python3 src/listen-to-node-status.py & 
       python3 src/listen-to-connectivity.py &
@@ -17,7 +17,7 @@ services:
       python3 src/connectivity-redis-and-alert.py &
       "
     env_file:
-        - ./PRIVATE/secrets.env
+      - ./PRIVATE/secrets.env
     depends_on:
       - redis
   redis:
