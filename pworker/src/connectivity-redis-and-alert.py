@@ -3,12 +3,8 @@ import time
 import json
 
 from pushover import send_pushover_notification
-import sentry_sdk
 
-sentry_sdk.init(
-    dsn="https://40425deb8455f665b472e012d073c7f1@o127869.ingest.sentry.io/4506388932067328",
-    traces_sample_rate=0.0,
-)
+
 redis_connection = redis.from_url("redis://redis:6379/0")
 
 heartbeat = 30

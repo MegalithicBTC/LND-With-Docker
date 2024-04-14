@@ -40,11 +40,10 @@ combined_creds = grpc.composite_channel_credentials(cert_creds, auth_creds)
 channel = grpc.secure_channel('localhost:10009', combined_creds)    
 stub = lnrpc.LightningStub(channel)
 
-CLEARNET_ADDRESS = "0322d0e43b3d92d30ed187f4e101a9a9605c3ee5fc9721e6dac3ce3d7732fbb13e@146.190.43.195:9735"
-TOR_ADDRESS = "0322d0e43b3d92d30ed187f4e101a9a9605c3ee5fc9721e6dac3ce3d7732fbb13e@m563h7c5fdzq63d4znhkl2pbhskbf4meeybjgxmp7mkkp5j7osadgwad.onion:9735"
-TOR_HOST = "m563h7c5fdzq63d4znhkl2pbhskbf4meeybjgxmp7mkkp5j7osadgwad.onion:9735"
-PUB_KEY = "0322d0e43b3d92d30ed187f4e101a9a9605c3ee5fc9721e6dac3ce3d7732fbb13e"
-CLEARNET_HOST = "164.92.106.32:9735"
+CLEARNET_ADDRESS = ""
+
+PUB_KEY = ""
+CLEARNET_HOST = ""
 def disconnect():
     try: 
         request = ln.DisconnectPeerRequest(
