@@ -13,7 +13,7 @@ services:
     command: >
       sh -c "python3 src/listen-to-node-status.py & 
       python3 src/listen-to-connectivity.py &
-      python3 src/megalith-redis-and-alert.py &
+      python3 src/node-status-redis-and-alert.py &
       python3 src/connectivity-redis-and-alert.py &
       "
     env_file:
