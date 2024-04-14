@@ -33,4 +33,5 @@ services:
               sh -c "python3 src/send-node-status.py"
       env_file:
         - ./PRIVATE/secrets.env
+      network_mode: 'host'
  
