@@ -1,0 +1,21 @@
+services:
+   send-connectivity-status-to-queue:
+      user: "1000:1000"
+      tty: true
+      build:
+        context: .
+        dockerfile: Dockerfile
+      volumes:
+        - type: bind
+          source: .
+          target: /workspace/lightning/pworker
+        - type: bind
+          source: ..
+          target: /workspace/lightning
+      command: >
+              sh -c "python3 src/test-for-remote-connectivity.py"
+      env_file:
+        - ./PRIVATE/secrets.env
+      network_mode: 'host'
+ 
+ 

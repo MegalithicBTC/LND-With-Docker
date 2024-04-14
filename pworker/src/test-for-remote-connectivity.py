@@ -16,13 +16,13 @@ def metadata_callback(context, callback):
 
 os.environ["GRPC_SSL_CIPHER_SUITES"] = 'HIGH+ECDSA'
 
-cert = open(os.path.expanduser('/workspace/bound_lnd_folder/lnd-data/tls.cert'), 'rb').read()
+cert = open(os.path.expanduser('/workspace/lightning/lnd/lnd-data/tls.cert'), 'rb').read()
 # print(cert)
 # creds = grpc.ssl_channel_credentials(cert)
 # channel = grpc.secure_channel('127.0.0.1:10009', creds)
 # stub = lnrpc.LightningStub(channel)
 # print(stub)
-with open(os.path.expanduser('/workspace/bound_lnd_folder/lnd-data/data/chain/bitcoin/mainnet/admin.macaroon'), 'rb') as f:
+with open(os.path.expanduser('/workspace/lightning/lnd/lnd-data/data/chain/bitcoin/mainnet/admin.macaroon'), 'rb') as f:
     macaroon_bytes = f.read()
     macaroon = codecs.encode(macaroon_bytes, 'hex')
 
@@ -60,11 +60,7 @@ def measure_connection_times(rabbit_channel):
     print('sleep after disconnect')
     time.sleep(2)
     print('testing clearnet')
-    print('clearnet addredss', CLEARNET_ADDRESS)
-    #peer_params = {}
-    # peer_params['addr'] = ,
-    # peer_params['perm'] = False
-    # peer_params['timeout'] = 60
+    print('clearnet address', CLEARNET_ADDRESS)
     is_in_error = False
     error_message =""
     connection_time = None
@@ -95,25 +91,12 @@ def measure_connection_times(rabbit_channel):
     print(hash)
     rabbit_channel.basic_publish(
             exchange="",
-            routing_key='ln-connectivity-status',
+            routing_key='megalith-docs-connectivity',
             body=json.dumps(hash),
             properties=pika.BasicProperties(
                 content_type="application/json", delivery_mode=1)
             )
     time.sleep(2)
-
-
-    # disconnect()
-    
-    # print('testing tor')
-    # request = ln.ConnectPeerRequest(
-    # addr=ln.LightningAddress(pubkey=PUB_KEY, host=TOR_HOST),
-    # perm=False,
-    # timeout=60,
-    # )
-    # response = stub.ConnectPeer(request)
-    # print('connected tor')
-    # print(response)
 
 rabbit_url = os.getenv("RABBITMQ_URL", "unk-url")
 params = pika.URLParameters(rabbit_url + "?heartbeat=500")
