@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  render:
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+          source: .
+          target: /workspace/lightning/pworker
+    command: >
+      sh -c "python3 src/listen-to-megalith.py & 
+      python3 src/listen-to-connectivity.py &
+      python3 src/megalith-redis-and-alert.py &
+      python3 src/connectivity-redis-and-alert.py &
+      "
+    env_file:
+        - ./PRIVATE/secrets.env
+    depends_on:
+      - redis
+    # cap_add:
+    #   - SYS_ADMIN
+    # network_mode: 'host'
+  redis:
+    image: redis
