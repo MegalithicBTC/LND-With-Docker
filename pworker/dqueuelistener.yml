@@ -11,7 +11,7 @@ services:
           source: .
           target: /workspace/lightning/pworker
     command: >
-      sh -c "python3 src/listen-to-megalith.py & 
+      sh -c "python3 src/listen-to-node-status.py & 
       python3 src/listen-to-connectivity.py &
       python3 src/megalith-redis-and-alert.py &
       python3 src/connectivity-redis-and-alert.py &
@@ -20,8 +20,5 @@ services:
         - ./PRIVATE/secrets.env
     depends_on:
       - redis
-    # cap_add:
-    #   - SYS_ADMIN
-    # network_mode: 'host'
   redis:
     image: redis

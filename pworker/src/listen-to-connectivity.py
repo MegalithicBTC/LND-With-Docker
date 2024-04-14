@@ -8,8 +8,6 @@ import time
 import sys
 redis_connection = redis.from_url("redis://redis:6379/0")
 
-
-
 def on_message(channel, method_frame, header_frame, body, ball):
     message = json.loads(body)
     message['timestamp'] = int(time.time())
@@ -21,10 +19,9 @@ def on_message(channel, method_frame, header_frame, body, ball):
 def get_messages_from_rabbitmq(ball):
     try:
         on_message_callback = functools.partial(on_message, ball=ball)
-        consumer_tag = 'ln-helper'
         print("rabbit consumer starting")
         ball.channel.basic_consume(
-            "ln-connectivity-status", on_message_callback, consumer_tag=consumer_tag
+            "megalith-docs-connectivity", on_message_callback,
         )
         try:
             ball.channel.start_consuming()
@@ -40,7 +37,7 @@ def start_listening():
     ball = DotMap()
     rabbit_url = os.getenv("RABBITMQ_URL", "unk-url")
     params = pika.URLParameters(rabbit_url + "?heartbeat=500")
-    connection = pika.BlockingConnection(params)  # Connect to CloudAMQP
+    connection = pika.BlockingConnection(params) 
     channel = connection.channel()
     channel.basic_qos(prefetch_count=1)
     ball.channel = channel

@@ -7,8 +7,6 @@ import functools
 import time
 import sys
 
-
-
 redis_connection = redis.from_url("redis://redis:6379/0")
 
 def on_message(channel, method_frame, header_frame, body, ball):
@@ -25,10 +23,9 @@ def on_message(channel, method_frame, header_frame, body, ball):
 def get_messages_from_rabbitmq(ball):
     try:
         on_message_callback = functools.partial(on_message, ball=ball)
-        consumer_tag = 'ln-helper'
         print("rabbit consumer starting")
         ball.channel.basic_consume(
-            "ln-megalith-status", on_message_callback, consumer_tag=consumer_tag
+            "megalith-docs-node-status", on_message_callback,
         )
         try:
             ball.channel.start_consuming()
