@@ -40,14 +40,13 @@ combined_creds = grpc.composite_channel_credentials(cert_creds, auth_creds)
 channel = grpc.secure_channel('localhost:10009', combined_creds)    
 stub = lnrpc.LightningStub(channel)
 
-NODE_FULL_NODE_ADDRESS = os.getenv("MAIN_LND_NODE_ADDRESS")
 
-PUB_KEY = 
-CLEARNET_HOST = 
+NODE_PUBLIC_KEY = os.getenv("NODE_URI").split('@')[0]
+NODE_IP_ADDRESS_AND_PORT = os.getenv("NODE_URI").split('@')[1]
 def disconnect():
     try: 
         request = ln.DisconnectPeerRequest(
-        pub_key=PUB_KEY,
+        pub_key=NODE_PUBLIC_KEY,
         ) 
         print('disconnected')
         response = stub.DisconnectPeer(request)
@@ -66,7 +65,7 @@ def measure_connection_times(rabbit_channel):
     start_time = time.time()
     try: 
         request = ln.ConnectPeerRequest(
-                addr=ln.LightningAddress(pubkey=PUB_KEY, host=CLEARNET_HOST),
+                addr=ln.LightningAddress(pubkey=NODE_PUBLIC_KEY, host=NODE_IP_ADDRESS_AND_PORT),
                 perm=False,
                 timeout=30)
         print("here is the connect requst", request)
