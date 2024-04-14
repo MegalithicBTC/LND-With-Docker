@@ -11,7 +11,7 @@ import time
 import subprocess
 import random
 
-print('in up monitor')
+print('in send node status')
 
 def metadata_callback(context, callback):
     # for more info see grpc docs
@@ -25,7 +25,7 @@ cert = open(os.path.expanduser('/workspace/lightning/lnd/lnd-data/tls.cert'), 'r
 # channel = grpc.secure_channel('127.0.0.1:10009', creds)
 # stub = lnrpc.LightningStub(channel)
 # print(stub)
-with open(os.path.expanduser('/workspace/bound_lnd_folder/lnd-data/data/chain/bitcoin/mainnet/admin.macaroon'), 'rb') as f:
+with open(os.path.expanduser('/workspace/lightning/lnd/lnd-data/data/chain/bitcoin/mainnet/admin.macaroon'), 'rb') as f:
     macaroon_bytes = f.read()
     macaroon = codecs.encode(macaroon_bytes, 'hex')
 
@@ -59,7 +59,7 @@ def report_current_status(rabbit_channel):
     )
     response = wtclientstub.ListTowers(request)
     hash['num_towers'] = len(response.towers)
-    file_path = '/workspace/lightning/zpool_status/pool_status.txt'
+    file_path = '/workspace/lightning/pworker/zpool_status/pool_status.txt'
     with open(file_path, 'r') as file:
         # Read and print the file's content
         zpool_status_string = file.read()
@@ -67,7 +67,7 @@ def report_current_status(rabbit_channel):
 
     rabbit_channel.basic_publish(
             exchange="",
-            routing_key='ln-megalith-status',
+            routing_key='megalith-docs-node-status',
             body=json.dumps(hash),
             properties=pika.BasicProperties(
                 content_type="application/json", delivery_mode=1)

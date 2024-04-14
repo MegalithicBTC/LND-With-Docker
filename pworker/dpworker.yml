@@ -32,7 +32,7 @@ services:
           source: ..
           target: /workspace/lightning
       command: >
-              sh -c "python3 src/megalith-upmonitor.py"
+              sh -c "python3 src/send-node-status.py"
       env_file:
         - ./PRIVATE/secrets.env
  
