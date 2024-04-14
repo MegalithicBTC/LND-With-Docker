@@ -19,9 +19,6 @@ def metadata_callback(context, callback):
 
 os.environ["GRPC_SSL_CIPHER_SUITES"] = 'HIGH+ECDSA'
 
-
-
-
 cert = open(os.path.expanduser('/workspace/lightning/lnd/lnd-data/tls.cert'), 'rb').read()
 # print(cert)
 # creds = grpc.ssl_channel_credentials(cert)
@@ -68,8 +65,6 @@ def report_current_status(rabbit_channel):
         zpool_status_string = file.read()
     hash['zpool_status'] = zpool_status_string
 
-
-
     rabbit_channel.basic_publish(
             exchange="",
             routing_key='ln-megalith-status',
@@ -86,7 +81,6 @@ params = pika.URLParameters(rabbit_url + "?heartbeat=500")
 connection = pika.BlockingConnection(params)  # Connect to CloudAMQP
 channel = connection.channel()
 channel.basic_qos(prefetch_count=1)
-
 
 heartbeat = 10
 while True:
