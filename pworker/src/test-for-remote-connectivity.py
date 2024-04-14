@@ -5,8 +5,7 @@ import codecs
 import json
 import pika
 import time
-import subprocess
-import random
+
 
 print('in test for remote connectivits')
 
