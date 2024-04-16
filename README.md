@@ -1,6 +1,8 @@
 This repository accompanies the tutorial at the [Megalithic Lightning Docs](https://docs.megalithic.me).
 
-You can clone this repository and use it, but we recommend instead that you follow the full tutorial.
+Following this tutorial will help you run LND, Tor, and Bitcoin Core, and then additionally (if you want), helps you set up Watchtower, Clearnet IP, and various scripts you can constantly run to ensure your node is always online and reachable.
+
+You can clone this repository and use it, but we recommend instead that you follow the full tutorial, which presents each Docker container in order and helps you configure them.
 
 Each of the scripts in the root directory launches something useful.
 
