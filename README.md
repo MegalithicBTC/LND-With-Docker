@@ -48,7 +48,7 @@ Here's a rundown on the scripts, in the rough order you might want to run them.
 
 
 
- (OPTIONAL SCRIPT TO RUN ON THIS MACHINE)
+ (OPTIONAL TO RUN ON THIS MACHINE)
 
  `start-lndg.sh`: [LNDG](https://docs.megalithic.me/running-a-full-node/set-up-lndg-with-docker) 
 
