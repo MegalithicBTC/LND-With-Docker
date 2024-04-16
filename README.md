@@ -7,6 +7,7 @@ Each of the scripts in the root directory launches something useful.
 Here's a rundown on the scripts, in the rough order you might want to run them: 
 
 `start-tor.sh`: [Tor](https://docs.megalithic.me/set-up-a-lightning-node/setup-tor-with-docker) 
+`start-bitcoin.sh`: [Bitcoin](https://docs.megalithic.me/set-up-a-lightning-node/setup-tor-with-docker), [Configuration](https://docs.megalithic.me/set-up-a-lightning-node/setup-bitcoin-core-with-docker#make-the-bitcoind-configuration-file)
 
 
 This repository uses bits of other repositories, including:
