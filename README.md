@@ -2,6 +2,8 @@ This repository accompanies the tutorial at the [Megalithic Lightning Docs](http
 
 Following this tutorial will help you run LND, Tor, and Bitcoin Core, all in Docker, and then additionally (if you want), helps you set up a Watchtower, a Clearnet IP, and various scripts you can constantly run to ensure your node is always online and reachable.
 
+We have [hardware recommendations](https://docs.megalithic.me/set-up-a-lightning-node/choosing-hardware), as well as directions for setting up a [ZFS Pool](https://docs.megalithic.me/set-up-a-lightning-node/zfs-pool) with two hard drives.
+
 You can clone this repository and use it, but we recommend instead that you follow the  [full tutorial](https://docs.megalithic.me/category/should-i-run-a-lightning-node), which presents each Docker container in order and helps you configure each Docker process.
 
 Each of the scripts in the root directory launches something useful.
