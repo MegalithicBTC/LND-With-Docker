@@ -19,7 +19,7 @@
 
 This repository accompanies the tutorial at the [Megalith Lightning Docs](https://docs.megalithic.me).
 
-Following this tutorial will help you run LND, Tor, and Bitcoin Core, all in Docker, and then additionally (if you want), helps you set up a Watchtower, a Clearnet IP, and various scripts you can constantly run to ensure your node is always online and reachable.
+Following this tutorial will help you run LND, Tor, Bitcoin Core, and LNDG, all in Docker, and then additionally (if you want), helps you set up a Watchtower, a Clearnet IP, and various scripts you can constantly run to ensure your node is always online and reachable.
 
 We have [hardware recommendations](https://docs.megalithic.me/set-up-a-lightning-node/choosing-hardware), as well as directions for setting up a [ZFS Pool](https://docs.megalithic.me/set-up-a-lightning-node/zfs-pool) with two hard drives.
 
@@ -44,10 +44,13 @@ Here's a rundown on the scripts, in the rough order you might want to run them.
 
 `exec-lncli`: [Executes CLI in running LND container](https://docs.megalithic.me/set-up-a-lightning-node/setup-lnd-with-docker#lets-meet-our-script-which-provides-cli-access-in-the-running-lnd-container)
 
-
- (OPTIONAL SCRIPTS TO RUN ON THIS MACHINE)
-
 `start-watch-backups.sh`: [Python script for automatic SCB uploads to S3](https://docs.megalithic.me/set-up-a-lightning-node/disaster-recovery) ([configuration](https://docs.megalithic.me/set-up-a-lightning-node/disaster-recovery#save-information-about-your-aws-account-in-the-private-directory))
+
+
+
+ (OPTIONAL SCRIPT TO RUN ON THIS MACHINE)
+
+ `start-lndg.sh`: [LNDG](https://docs.megalithic.me/running-a-full-node/set-up-lndg-with-docker) 
 
 `start-send-node-status.sh`: [Constantly send node status messages to a RabbitMQ Queue](https://docs.megalithic.me/the-gentlemans-guide-to-routing-nodes/alarms_rabbitmq_redis) (configuration requires these directions)
 
