@@ -6,6 +6,10 @@ You can clone this repository and use it, but we recommend instead that you foll
 
 Each of the scripts in the root directory launches something useful.
 
+Currently to run everything, you need four (4) different machines, typically two (2) local computers with at least 1 TB of storage, which will be running LND and an LND Watchtower, and then (2) two more machines, typically two different VPS instances. 
+
+You might only want to run the one (1) MAIN LND NODE MACHINE...  that's why we recommend you do the [full tutorial](https://docs.megalithic.me/category/should-i-run-a-lightning-node), as that will help you decide if you need to add the other machines, too.
+
 Here's a rundown on the scripts, in the rough order you might want to run them.
 
 
@@ -20,7 +24,7 @@ Here's a rundown on the scripts, in the rough order you might want to run them.
 `exec-lncli`: [Executes CLI in running LND container](https://docs.megalithic.me/set-up-a-lightning-node/setup-lnd-with-docker#lets-meet-our-script-which-provides-cli-access-in-the-running-lnd-container)
 
 
- (OPTIONAL SCRIPTS)
+ (OPTIONAL SCRIPTS TO RUN ON THIS MACHINE)
 
 `start-watch-backups.sh`: [Python script for automatic SCB uploads to S3](https://docs.megalithic.me/set-up-a-lightning-node/disaster-recovery) ([configuration](https://docs.megalithic.me/set-up-a-lightning-node/disaster-recovery#save-information-about-your-aws-account-in-the-private-directory))
 
@@ -31,7 +35,6 @@ Here's a rundown on the scripts, in the rough order you might want to run them.
 `start-tor.sh`: [Tor](https://docs.megalithic.me/set-up-a-lightning-node/setup-tor-with-docker) 
 
 `start-bitcoin.sh`: [Bitcoin Core](https://docs.megalithic.me/set-up-a-lightning-node/setup-tor-with-docker) ([configuration](https://docs.megalithic.me/set-up-a-lightning-node/setup-bitcoin-core-with-docker#make-the-bitcoind-configuration-file))
-
 `start-watchtower.sh`: [LND Watchtower](https://docs.megalithic.me/set-up-a-lightning-node/connect-to-a-watchtower#set-up-a-watchtower-the-hard-way) (configuration requires these directions)
 
 `start-remote-connectivity.sh`: [Constantly test LND for external connectivity](https://docs.megalithic.me/the-gentlemans-guide-to-routing-nodes/alarms_rabbitmq_redis) (configuration requires these directions)
