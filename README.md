@@ -1,3 +1,19 @@
+```
+ |  \/  | ___  __ _  __ _| (_) |_| |__              
+ | |\/| |/ _ \/ _` |/ _` | | | __| '_ \             
+ | |  | |  __/ (_| | (_| | | | |_| | | |            
+ |_|  |_|\___|\__, |\__,_|_|_|\__|_| |_|            
+  _     _     |___/   _   _           _             
+ | |   (_) __ _| |__ | |_| |__  _ __ (_)_ __   __ _ 
+ | |   | |/ _` | '_ \| __| '_ \| '_ \| | '_ \ / _` |
+ | |___| | (_| | | | | |_| | | | | | | | | | | (_| |
+ |_____|_|\__, |_| |_|\__|_| |_|_| |_|_|_| |_|\__, |
+ |  _ \  _|___/___ ___                        |___/ 
+ | | | |/ _ \ / __/ __|                             
+ | |_| | (_) | (__\__ \                             
+ |____/ \___/ \___|___/  
+```
+
 This repository accompanies the tutorial at the [Megalith Lightning Docs](https://docs.megalithic.me).
 
 Following this tutorial will help you run LND, Tor, and Bitcoin Core, all in Docker, and then additionally (if you want), helps you set up a Watchtower, a Clearnet IP, and various scripts you can constantly run to ensure your node is always online and reachable.
