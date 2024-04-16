@@ -6,7 +6,7 @@ Each of the scripts in the root directory launches something useful.
 
 Here's a rundown on the scripts, in the rough order you might want to run them: 
 
-`start-tor.sh`: [Launches Tor](https://docs.megalithic.me/set-up-a-lightning-node/setup-tor-with-docker) 
+`start-tor.sh`: [Tor](https://docs.megalithic.me/set-up-a-lightning-node/setup-tor-with-docker) 
 
 
 This repository uses bits of other repositories, including:
