@@ -1,4 +1,4 @@
-This repository accompanies the tutorial at the [Megalithic Lightning Docs](https://docs.megalithic.me).
+This repository accompanies the tutorial at the [Megalith Lightning Docs](https://docs.megalithic.me).
 
 Following this tutorial will help you run LND, Tor, and Bitcoin Core, all in Docker, and then additionally (if you want), helps you set up a Watchtower, a Clearnet IP, and various scripts you can constantly run to ensure your node is always online and reachable.
 
@@ -8,9 +8,9 @@ You can clone this repository and use it, but we recommend instead that you foll
 
 Each of the scripts in the root directory launches something useful.
 
-Currently to run everything, you need four (4) different machines, typically two (2) local computers with at least 1 TB of storage, which will be running LND and an LND Watchtower, and then (2) two more machines, typically two different VPS instances. 
+Currently to run everything, you need four (4) different machines, typically two (2) local computers, in different physical locations, each with at least 1 TB of storage. These machines  will be running LND and an LND Watchtower.  Then two (2) more machines are required, typically two different VPS instances. 
 
-You might only want to run the one (1) MAIN LND NODE MACHINE...  that's why we recommend you do the [full tutorial](https://docs.megalithic.me/category/should-i-run-a-lightning-node), as that will help you decide if you need to add the other machines, too.
+But: Depending on your use case, you might only want to run the one (1) MAIN LND NODE MACHINE...  that's why we recommend you do the [full tutorial](https://docs.megalithic.me/category/should-i-run-a-lightning-node), as that will help you decide if you need to add the other machines, too.
 
 Here's a rundown on the scripts, in the rough order you might want to run them.
 
