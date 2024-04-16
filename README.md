@@ -25,7 +25,7 @@ We have [hardware recommendations](https://docs.megalithic.me/set-up-a-lightning
 
 You can clone this repository and use it, but we recommend instead that you follow the  [full tutorial](https://docs.megalithic.me/category/should-i-run-a-lightning-node), which presents each Docker container in order and helps you configure each Docker process.
 
-Each of the scripts in the root directory launches something useful.
+Each of the scripts (ending with `.sh`) in the root directory launches something useful.
 
 Currently, to run everything, you need four (4) different machines, typically two (2) local computers, at different physical locations, each with at least 1 TB of storage. These machines  will be running LND and an LND Watchtower.  Then, two (2) more machines are required, typically two different VPS instances. 
 
