@@ -1,18 +1,19 @@
 ```
-  __  __                  _ _ _   _                 
- |  \/  | ___  __ _  __ _| (_) |_| |__              
- | |\/| |/ _ \/ _` |/ _` | | | __| '_ \             
- | |  | |  __/ (_| | (_| | | | |_| | | |            
- |_|  |_|\___|\__, |\__,_|_|_|\__|_| |_|            
-  _     _     |___/   _   _           _             
- | |   (_) __ _| |__ | |_| |__  _ __ (_)_ __   __ _ 
- | |   | |/ _` | '_ \| __| '_ \| '_ \| | '_ \ / _` |
- | |___| | (_| | | | | |_| | | | | | | | | | | (_| |
- |_____|_|\__, |_| |_|\__|_| |_|_| |_|_|_| |_|\__, |
- |  _ \  _|___/___ ___                        |___/ 
- | | | |/ _ \ / __/ __|                             
- | |_| | (_) | (__\__ \                             
- |____/ \___/ \___|___/                             
+   __  __                  _ _ _   _           
+ |  \/  | ___  __ _  __ _| (_) |_| |__        
+ | |\/| |/ _ \/ _` |/ _` | | | __| '_ \       
+ | |  | |  __/ (_| | (_| | | | |_| | | |      
+ |_|  |_|\___|\__, |\__,_|_|_|\__|_| |_|      
+  _     _     |___/   _         _             
+ | |   (_) __ _| |__ | |_ _ __ (_)_ __   __ _ 
+ | |   | |/ _` | '_ \| __| '_ \| | '_ \ / _` |
+ | |___| | (_| | | | | |_| | | | | | | | (_| |
+ |_____|_|\__, |_| |_|\__|_| |_|_|_| |_|\__, |
+ |  _ \  _|___/___ ___                  |___/ 
+ | | | |/ _ \ / __/ __|                       
+ | |_| | (_) | (__\__ \                       
+ |____/ \___/ \___|___/                       
+                                                                        
                                                     
 ```
 
@@ -26,7 +27,7 @@ You can clone this repository and use it, but we recommend instead that you foll
 
 Each of the scripts in the root directory launches something useful.
 
-Currently to run everything, you need four (4) different machines, typically two (2) local computers, in different physical locations, each with at least 1 TB of storage. These machines  will be running LND and an LND Watchtower.  Then two (2) more machines are required, typically two different VPS instances. 
+Currently, to run everything, you need four (4) different machines, typically two (2) local computers, at different physical locations, each with at least 1 TB of storage. These machines  will be running LND and an LND Watchtower.  Then, two (2) more machines are required, typically two different VPS instances. 
 
 But: Depending on your use case, you might only want to run the one (1) MAIN LND NODE MACHINE...  that's why we recommend you do the [full tutorial](https://docs.megalithic.me/category/should-i-run-a-lightning-node), as that will help you decide if you need to add the other machines, too.
 
