@@ -30,7 +30,7 @@ services:
           iptables -t nat -D PREROUTING -i eth0 -p tcp --dport 9735 -j DNAT --to-destination 10.8.0.2:9735;
       - UI_TRAFFIC_STATS=true
       - UI_CHART_TYPE=1 
-    image: ghcr.io/wg-easy/wg-easy
+    image: ghcr.io/wg-easy/wg-easy:13
     env_file:
       - ./PRIVATE/private.env
     container_name: wg-easy
