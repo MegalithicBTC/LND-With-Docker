@@ -1,3 +1,6 @@
+### before using this Dockerfile, please update the "image: " line with the most recent release
+### from here: https://github.com/lightningnetwork/lnd/releases
+
 services:
   lnd:
     image: lightninglabs/lnd:v0.20.0-beta
