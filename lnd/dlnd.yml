@@ -1,6 +1,6 @@
 services:
   lnd:
-    image: lightninglabs/lnd:v0.18.3-beta.rc1
+    image: lightninglabs/lnd:v0.20.0-beta
     user: 1000:1000
     volumes:
       - type: bind
