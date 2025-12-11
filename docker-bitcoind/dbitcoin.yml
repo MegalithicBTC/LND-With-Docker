@@ -1,16 +1,19 @@
-version: '3'
 services:
-  bitcoind:
-    build:
-      dockerfile: Dockerfile
-      context: .
+  bitcoin:
     container_name: bitcoind
+    user: 1000:1000
+    image: lncm/bitcoind:v28.0
+    command: ["-conf=/data/.bitcoin/bitcoin.conf"]
     volumes:
       - type: bind
         source: ./bitcoind-data
-        target: /bitcoin/.bitcoin
+        target: /data/.bitcoin
       - type: bind
-        source: ./PRIVATE/bitcoin.conf
-        target: /bitcoin/.bitcoin/bitcoin.conf
-
+        source: ./bitcoin.conf
+        target: /data/.bitcoin/bitcoin.conf
     network_mode: host
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"  # Maximum size of each log file
+        max-file: "5"     # Maximum number of log files to keep
